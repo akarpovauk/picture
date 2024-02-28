@@ -1,9 +1,11 @@
 // import {hideTabContent, showTabContent} from './tabs';
+let gift = document.querySelector('.fixed-gift');
 
 function closeWindows() {
 	const windows = document.querySelectorAll('[data-modal]');
 	windows.forEach(item => {
 		item.style.display = 'none';
+		item.classList.add('animated', 'fadeIn');
 	});
 }
 
@@ -12,6 +14,7 @@ function closeModal(modalSelector) {
 	modal.style.display = 'none';
 	document.body.style.overflow = '';
 	document.body.style.marginRight = '0px'; 
+	gift.style.marginRight = '0px'; 
 }
 
 function disableBtn(btnSelector) {	
@@ -23,17 +26,18 @@ function enableBtn(btnSelector) {
 }
 
 const modals = () => {
-	function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
+	let btnPressed = false;
+	function bindModal(triggerSelector, modalSelector, closeSelector, destroy = false) {
 		const trigger = document.querySelectorAll(triggerSelector),
 			modal = document.querySelector(modalSelector),
 			close = document.querySelector(closeSelector),
 			scroll = calcScroll();
 
-
 		function openModal() {
 			modal.style.display = 'block';
 			document.body.style.overflow = 'hidden'; 
 			document.body.style.marginRight = `${scroll}px`; 
+			gift.style.marginRight = `${scroll}px`; 
 		}
 
 		trigger.forEach(item => {
@@ -41,30 +45,13 @@ const modals = () => {
 				if (e.target) {
 					e.preventDefault();
 				}
-				if (item.classList.contains('popup_calc_button')) {
-
-					hideTabContent('.big_img > img', '.balcon_icons_img', 'do_image_more');
-					showTabContent('.big_img > img', '.balcon_icons_img', 'do_image_more', 'inline-block');
-					disableBtn ('.popup_calc_button');
-				}
-				if (item.classList.contains('popup_calc_profile_button')) {
-					
-					const selectItem = document.querySelector('#view_type');
-					selectItem.selectedIndex = 0;
-
-					const inputs = document.querySelectorAll('input.checkbox');
-					inputs.forEach(input => {
-						if (input.checked) {
-							input.checked = false;
-						}
-					});
-					disableBtn ('.popup_calc_profile_button');
-
+				btnPressed = true;
+				if (destroy) {
+					item.remove();
 				}
 				closeWindows();
 				openModal(modalSelector);
 			});
-
 		});
 
 		close.addEventListener('click', () => {
@@ -73,7 +60,7 @@ const modals = () => {
 		});
 
 		modal.addEventListener('click', (e) => {
-			if (e.target === modal && closeClickOverlay) {
+			if (e.target === modal) {
 				closeWindows();
 				closeModal(modalSelector);
 			}
@@ -93,6 +80,8 @@ const modals = () => {
 			if(!display) {
 				document.querySelector(selector).style.display = 'block';
 				document.body.style.overflow = 'hidden';
+				let scroll = calcScroll();
+				document.body.style.marginRight = `${scroll}px`; 
 			}
 
 		}, time);
@@ -113,10 +102,21 @@ const modals = () => {
 		return scrollWidth;
 	}
 
+	function openByScroll(selector) {
+		window.addEventListener('scroll', () => {
+			let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+			if(!btnPressed && (window.pageYOffset + document.documentElement.clientHeight >= scrollHeight - 1)) {
+				document.querySelector(selector).click();
+			}
+		});
+	}
+
 	bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
 	bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-	showModalByTime('.popup-consultation', 6000);
-
+	bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+	openByScroll('.fixed-gift');
+	// showModalByTime('.popup-consultation', 6000);
+	
 };
 
 export default modals;
