@@ -15,7 +15,6 @@ const showMoreStyles = (trigger, styles) => {
 		// btn.styles.display = 'none';
 		btn.remove();
 	});
-
 };
 
 export default showMoreStyles;
