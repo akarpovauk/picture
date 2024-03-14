@@ -1,6 +1,9 @@
 const mask = (selector) => {
 
 	let setCursorPosition = (pos, elem) => {
+		elem.setAttribute('maxlength', 18);
+		elem.setAttribute('autocomplete', 'disabled');
+		
 		elem.focus();
 
 		if (elem.setSelectionRange) {
