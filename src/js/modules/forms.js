@@ -1,11 +1,15 @@
 // import checkNumInputs from './checkNumInputs';
 // import {closeWindows, closeModal} from './modals';
 
+import {postData} from '../services/requests';
+
 const forms = () => {
 	const allForms = document.querySelectorAll('form'),
 		inputs = document.querySelectorAll('input'),
 		upload = document.querySelectorAll('[name = "upload"]'),
-		text = document.querySelectorAll('[name="message"]');
+		text = document.querySelectorAll('[name="message"]'),
+		selects = document.querySelectorAll('select'),
+		resultBlock = document.querySelector('.calc-price');
 
 	// checkNumInputs('input[name = "user_phone"]');
 
@@ -18,16 +22,6 @@ const forms = () => {
 		fail: 'assets/img/fail.png'
 	};
 
-	const postData = async (url, data) => {
-		// document.querySelector('.status').textContent = message.loading;
-		let res = await fetch(url, {
-			method: 'POST',
-			body: data
-		});
-
-		return await res.text();
-	};
-
 	const clearInputs = () => {
 		inputs.forEach(item => {
 			item.value = '';
@@ -36,6 +30,9 @@ const forms = () => {
 			item.previousElementSibling.textContent = 'Файл не выбран';
 		});
 		text.forEach(item => {
+			item.value = '';
+		});
+		selects.forEach(item => {
 			item.value = '';
 		});
 	};
@@ -76,7 +73,8 @@ const forms = () => {
 			statusMessage.appendChild(textMessage);
 
 			const path = {
-				designer: 'assets/server.php',
+				// designer: 'assets/server.php',
+				designer: 'assets/question.php',
 				question: 'assets/question.php'
 			};
 			
@@ -87,9 +85,19 @@ const forms = () => {
 			form.closest('.popup-design') || form.classList.contains('calc_form') ? api = path.designer : api = path.question;
 			console.log(api);
 
+			// if (selects) {
+			// 	selects.forEach(select => {
+
+			// 		// console.log(select.id);
+			// 		// console.log(select.value);
+			// 		// console.log(select.options[select.selectedIndex].text);
+			// 		// formData.append(select.options[select.selectedIndex].text, select.value);
+			// 	});
+			// }
+
 			postData(api, formData)
 				.then(res => {
-					console.log(`my res is ${res}`);
+					console.log(`my result is ${res}`);
 					statusImg.setAttribute('src', message.ok);
 					textMessage.textContent = message.success;
 				})
@@ -99,6 +107,9 @@ const forms = () => {
 				})
 				.finally(() => {
 					clearInputs();
+					if(form.id==='calc-form') {
+						resultBlock.textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+					}
 					setTimeout(() => {
 						statusMessage.remove();
 						form.style.display = 'block';
