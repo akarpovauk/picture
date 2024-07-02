@@ -377,6 +377,37 @@ const forms = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/hamburger.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/hamburger.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const hamburger = (menuSelector, hamburgerSelector) => {
+  const menuElem = document.querySelector(menuSelector),
+    hamburgerElem = document.querySelector(hamburgerSelector);
+  menuElem.style.display = 'none';
+  hamburgerElem.addEventListener('click', () => {
+    if (menuElem.style.display == 'none' && window.screen.availWidth < 993) {
+      menuElem.style.display = 'block';
+    } else {
+      menuElem.style.display = 'none';
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (window.screen.availWidth > 992) {
+      menuElem.style.display = 'none';
+    }
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (hamburger);
+
+/***/ }),
+
 /***/ "./src/js/modules/mask.js":
 /*!********************************!*\
   !*** ./src/js/modules/mask.js ***!
@@ -848,6 +879,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
 /* harmony import */ var _modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pictureSize */ "./src/js/modules/pictureSize.js");
 /* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
+/* harmony import */ var _modules_hamburger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./modules/hamburger */ "./src/js/modules/hamburger.js");
+
 
 
 
@@ -875,6 +908,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block');
   // accordion('.accordion-heading', '.accordion-block');
   (0,_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading');
+  (0,_modules_hamburger__WEBPACK_IMPORTED_MODULE_10__["default"])('.burger-menu', '.burger');
 });
 })();
 
